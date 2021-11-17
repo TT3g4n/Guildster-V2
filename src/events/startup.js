@@ -59,4 +59,4 @@ async function readdir() {
 }
 
 // Export the functions.
-module.exports = { readdir };
+module.exports = readdir

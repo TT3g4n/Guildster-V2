@@ -1,6 +1,6 @@
 // Packages
 const { Client, Collection, Intents, MessageEmbed } = require("discord.js");
-const { stringify } = require("querystring");
+const allIntents = new Intents(32767);
 
 // Require .env file for tokens and set their variables.
 require("dotenv").config();
@@ -13,7 +13,7 @@ class BotClient extends Client {
   constructor() {
     super({
       partials: ["CHANNEL", "GUILD_MEMBER", "MESSAGE", "REACTION", "USER"],
-      Intents: Intents.ALL,
+      intents: allIntents,
     });
     // Set the variables that can be accesed anywhere in the project.
     this.owners = ["381024325974622209"];
@@ -58,7 +58,51 @@ class BotClient extends Client {
 
   // Command Handler
   commandHandler() {
-    require("./events/startup").readdir();
+    require("./events/startup")();
+  }
+
+  // Feature Loader
+  featureLoader() {
+    this.fs.readdirSync("src/features").forEach((file) => {
+      require("./features/" + file)();
+    });
+  }
+
+  // Status Updates
+  statusUpdates() {
+    console.log(`logged in as ${this.user.tag}`);
+    console.log(`${this.commandlength} commands were loaded in total.`);
+    // console.log("Running on Shard", this.shard);
+
+    const activities_list = [
+      {
+        name: `over ${this.guilds.cache.size} guilds! | *help`,
+        type: "WATCHING",
+        url: "https://www.youtube.com/T3g4n",
+      },
+      {
+        name: `with ${this.users.cache.size} users! | *help`,
+        type: "PLAYING",
+      },
+      { name: `the *help command!`, type: "WATCHING" },
+      { name: `${this.commandlength} Commands! | *help`, type: "LISTENING" },
+    ];
+
+    setInterval(() => {
+      const index = Math.floor(Math.random() * activities_list.length);
+
+      this.user.setActivity(activities_list[index]);
+    }, 1000 * 10);
+  }
+
+  // Start
+  start() {
+    this.login(token);
+    this.commandHandler();
+    this.featureLoader();
+    this.once("ready", () => {
+      this.statusUpdates();
+    });
   }
 }
 

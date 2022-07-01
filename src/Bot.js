@@ -70,7 +70,7 @@ class BotClient extends Client {
       require(`./features/${file}`)();
     });
   }
-
+  
   // Status Updates
   statusUpdates() {
     console.log(`logged in as ${this.user.tag}`);

@@ -60,7 +60,11 @@ function readdir() {
   });
 
   // Set the help command.
-  
+
+  // On messages, load the messages file.
+  bot.on("messageCreate", (msg) => {
+    require("../events/message.js")(msg);
+  });
 }
 
 // Export the functions.

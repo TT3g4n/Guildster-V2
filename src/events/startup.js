@@ -5,7 +5,7 @@ const { bot } = require("../index");
 const fs = bot.fs;
 const path = bot.path;
 
-async function readdir() {
+function readdir() {
   // Credit to SalvageDev for the below function. It basically gets folders inside of folders and puts them in an array.
   function find_nested(dir, pattern) {
     let results = [];
@@ -27,36 +27,41 @@ async function readdir() {
 
   // Find the commands inside the folders
   find_nested("src/commands", ".js").forEach(async (file) => {
-    if (!file) return;
-    if (!file.endsWith(".js")) return;
-    const props = require(file);
+    // Chech that there is a file and that it is a command.
+    if (!file || !file.endsWith(".js")) return;
+    // Load the file.
+    const command = require(file);
     try {
-      props;
-    } catch (e) {
-      console.log(e);
+      command;
+    } catch (err) {
+      console.log(err);
     }
 
-    bot.commands.set(props.name.toLowerCase(), props);
+    // Add it to the list of commands.
+    bot.commands.set(command.name.toLowerCase(), command);
 
     // Adds the category to a list of all categories for easy access.
-    if (!bot.categorys[props.category]) {
-      bot.categorys[props.category] = [];
-      bot.allcategorys.push(props.category);
+    if (!bot.allcatagories[command.catagory]) {
+      // Check if the catagory is already in the list
+      bot.allcatagories[command.catagory] = []; // If not, create the list.
+      bot.allcatagories[command.catagory].push(command.catagory); // Add the catagory to the list.
     }
 
-    bot.categorys[props.category].push(props.name);
-
-    // Make sure the command has all the correct properties.
-    if (!props.aliases) console.error(props.name + " has no aliases.");
-    if (!props.name) console.error(props.name + " has no name.");
-    if (!props.usage) console.error(props.name + " has no usage.");
-    if (!props.description) console.error(props.name + " has no description.");
-    if (!props.category) console.error(props.name + " has no category.");
+    // Make sure the command has all the correct properties, and print them to the console if it doesn't.
+    if (!command.name) console.error(command.name + " has no name.");
+    if (!command.aliases) console.error(command.name + " has no aliases.");
+    if (!command.usage) console.error(command.name + " has no usage.");
+    if (!command.description)
+      console.error(command.name + " has no description.");
+    if (!command.catagory) console.error(command.name + " has no category.");
 
     // Add 1 to the command length.
     bot.commandlength++;
   });
+
+  // Set the help command.
+  
 }
 
 // Export the functions.
-module.exports = readdir
+module.exports = readdir;

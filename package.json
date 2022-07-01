@@ -1,18 +1,18 @@
 {
   "name": "guildster-v2",
   "version": "1.0.0",
-  "description": "",
+  "description": "Rewrite my discord bot to have clearer code, and to work with the new discord.js v13 api.",
   "main": "src/index.js",
   "scripts": {
     "dev": "nodemon --trace-warnings src/index.js",
     "start": "node src/index.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "T3g4n",
+  "license": "MIT",
   "dependencies": {
-    "discord.js": "^13.3.1",
+    "discord.js": "^13.8.1",
     "dotenv": "^10.0.0",
-    "mongoose": "^6.0.13"
+    "mongoose": "^6.4.1"
   }
 }

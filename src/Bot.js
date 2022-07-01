@@ -9,32 +9,36 @@ const mongotoken = process.env.MONGOTOKEN;
 
 // The main class
 class BotClient extends Client {
-  // Honestly IDK what this does but it's in my old code so 🤷‍♀️.
+  // IDK what this does but it's in my old code.
   constructor() {
     super({
       partials: ["CHANNEL", "GUILD_MEMBER", "MESSAGE", "REACTION", "USER"],
       intents: allIntents,
     });
     // Set the variables that can be accesed anywhere in the project.
-    this.owners = ["381024325974622209"];
-    this.allCatagorys = [];
+    this.owners = ["381024325974622209"]; // My discord ID.
+    this.allcatagories = []; // This will be set later.
     this.embed = new MessageEmbed();
     this.fs = require("fs");
     this.path = require("path");
     this.ms = require("ms");
     this.discord = require("discord.js");
     this.commandlength = 0; // This will be set later.
-    this.catagorys = {}; // This will be set later.
+    this.catagories = {}; // This will be set later.
     this.queue = {}; // This will be set later.
-    this.helpEmbed = new MessageEmbed();
+    this.helpEmbed = new MessageEmbed()
     this.afkmap = new Collection();
     this.commands = new Collection();
     this.prefixes = new Collection();
   }
 
+
   // Embed
-  e(description = String(), send = Boolean()) {
-    return new MessageEmbed();
+  e(desc = String(), options = Object()) {
+    return new MessageEmbed({
+      description: desc,
+      options,
+    });
   }
 
   // Error Embed
@@ -52,7 +56,6 @@ class BotClient extends Client {
     const capitalized =
       string.toLowerCase().charAt(0).toUpperCase() +
       string.toLowerCase().slice(1);
-
     return capitalized;
   }
 
@@ -64,7 +67,7 @@ class BotClient extends Client {
   // Feature Loader
   featureLoader() {
     this.fs.readdirSync("src/features").forEach((file) => {
-      require("./features/" + file)();
+      require(`./features/${file}`)();
     });
   }
 

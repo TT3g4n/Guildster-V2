@@ -14,6 +14,11 @@ function onMessage(msg) {
   }
   // Check for prefix of that server, and if it doesn't match the server id, stop.
   if (!msg.content.startsWith(bot.prefixes.get(msg.guildId))) return;
+  // Check if the command exists.
+  const cmd = msg.content.split(bot.prefixes.get(msg.guildId))[1].toString();
+  console.log(bot.commands)
+  if(!bot.commands.find(cmd) || !bot.aliases[cmd]) return;
+  console.log("poggers") 
 }
 
 module.exports = onMessage;

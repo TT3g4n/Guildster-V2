@@ -26,7 +26,6 @@ class BotClient extends Client {
     this.commandlength = 0; // This will be set later.
     this.catagories = {}; // This will be set later.
     this.queue = {}; // This will be set later.
-    this.aliases = {} // This will be set later.
     this.helpEmbed = new MessageEmbed()
     this.afkmap = new Collection();
     this.commands = new Collection();

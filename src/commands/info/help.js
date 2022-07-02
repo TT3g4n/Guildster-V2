@@ -13,12 +13,12 @@ module.exports = {
    */
   run: async (message, args) => {
     if (!args[0]) {
-      const prefix = bot.prefixes.get(message.guild.id);
+      const prefix = bot.prefixes.get(message.guildId);
       const sendmessage = bot.embed.setDescription(`Hello ${
         message.author
       }! This is what I can do (type them)!
       
-      \`\`\`${prefix}help ${bot.allCatagorys
+      \`\`\`${prefix}help ${bot.allcatagories
         .join(`\n${prefix}help `)
         .toString()}\`\`\`
       or you can use the 🌎 reaction to see all the commands (in dm's)!
@@ -27,7 +27,7 @@ module.exports = {
         bot.commandlength
       } commands for you to try, so you never get bored!`);
 
-      message.reply(sendmessage).then((msg) => {
+      message.reply({ embeds: [sendmessage] }).then((msg) => {
         msg.react("🌎");
         const filter = (reaction, user) =>
           reaction.emoji.name === "🌎" && user.id === message.author.id;
@@ -37,22 +37,28 @@ module.exports = {
         });
         reactions.on("collect", (reaction, user) => {
           try {
-            message.author.send(
-              bot.helpEmbed.setTitle(`All commands for ${bot.user.username}`)
-            );
-            msg.edit(
-              bot.embed.setDescription(
-                `I have sent you a DM, <@${message.author.id}>`
-              )
-            );
+            message.author.send({
+              embeds: [
+                bot.helpEmbed.setTitle(`All commands for ${bot.user.username}`),
+              ],
+            });
+            msg.edit({
+              embeds: [
+                bot.embed.setDescription(
+                  `I have sent you a DM, <@${message.author.id}>`
+                ),
+              ],
+            });
           } catch (e) {
-            msg.edit(
-              bot.embed.setDescription(
-                "I can't send you a DM, <@" +
-                  message.author.id +
-                  ">. Please try opening your DM's and running this command again!"
-              )
-            );
+            msg.edit({
+              embeds: [
+                bot.embed.setDescription(
+                  "I can't send you a DM, <@" +
+                    message.author.id +
+                    ">. Please try opening your DM's and running this command again!"
+                ),
+              ],
+            });
           }
         });
       });
@@ -75,11 +81,13 @@ module.exports = {
 
         // ________________________
 
-        message.reply(
-          bot
-            .e(`\`\`\`${bot.catagorys[args[0]]}\`\`\``)
-            .setTitle(`${bot.capitalize(args[0])} Catagory`)
-        );
+        message.reply({
+          embeds: [
+            bot
+              .e(`\`\`\`${bot.catagorys[args[0]]}\`\`\``)
+              .setTitle(`${bot.capitalize(args[0])} Catagory`),
+          ],
+        });
         return;
       }
 
@@ -95,12 +103,14 @@ module.exports = {
       if (command.catagory)
         data.push("Catagory: `" + command.catagory.toString() + "`");
 
-      message.reply(
-        bot.embed
-          .setDescription(data)
-          .setTitle('Help for "' + command.name + '"')
-          .setTimestamp(Date.now())
-      );
+      message.reply({
+        embeds: [
+          bot.embed
+            .setDescription(data)
+            .setTitle('Help for "' + command.name + '"')
+            .setTimestamp(Date.now()),
+        ],
+      });
     }
   },
 };
